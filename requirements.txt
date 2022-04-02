@@ -1,0 +1,7 @@
+Django>=4.0,<4.1
+gunicorn==20.0.4
+wagtail>=2.16,<2.17
+
+black
+isort
+mypy
