@@ -39,33 +39,10 @@ The Getting Started docs do not show how to use the generated Dockerfile, that i
 
 ```
 docker build -t mysite .
+docker run -p 8000:8000 mysite
 ```
 
-This fails::
-
-```
-=> ERROR [ 6/10] RUN pip install -r /requirements.txt                                                                                                                       2.1s.
----
-
-    > [ 6/10] RUN pip install -r /requirements.txt:
-#10 0.726 Collecting Django<4.1,>=4.0
-#10 0.780   Downloading Django-4.0.3-py3-none-any.whl (8.0 MB)
-#10 1.893 ERROR: Could not find a version that satisfies the requirement wagtail==3.0a0 (from -r /requirements.txt (line 2)) (from versions: 0.1, 0.2, 0.3, 0.3.1, 0.4, 0.4.1, 0.5, 0.6, 0.7, 0.8, 0.8.1, 0.8.2, 0.8.3, 0.8.4, 0.8.5, 0.8.6, 0.8.7, 0.8.8, 0.8.9, 0.8.10, 1.0b1, 1.0b2, 1.0rc1, 1.0rc2, 1.0, 1.1rc1, 1.1, 1.2rc1, 1.2, 1.3rc1, 1.3, 1.3.1, 1.4rc1, 1.4, 1.4.1, 1.4.2, 1.4.3, 1.4.4, 1.4.5, 1.4.6, 1.5rc1, 1.5, 1.5.1, 1.5.2, 1.5.3, 1.6rc1, 1.6, 1.6.1, 1.6.2, 1.6.3, 1.7rc1, 1.7, 1.8rc1, 1.8, 1.8.1, 1.8.2, 1.9rc1, 1.9, 1.9.1, 1.10rc1, 1.10, 1.10.1, 1.11rc1, 1.11, 1.11.1, 1.12rc1, 1.12, 1.12.1, 1.12.2, 1.12.3, 1.12.4, 1.12.5, 1.12.6, 1.13rc1, 1.13, 1.13.1, 1.13.2, 1.13.3, 1.13.4, 2.0b1, 2.0rc1, 2.0, 2.0.1, 2.0.2, 2.1rc1, 2.1rc2, 2.1, 2.1.1, 2.1.2, 2.1.3, 2.2rc1, 2.2rc2, 2.2, 2.2.1, 2.2.2, 2.3rc1, 2.3rc2, 2.3, 2.4rc1, 2.4, 2.5rc1, 2.5, 2.5.1, 2.5.2, 2.6rc1, 2.6, 2.6.1, 2.6.2, 2.6.3, 2.7rc1, 2.7rc2, 2.7, 2.7.1, 2.7.2, 2.7.3, 2.7.4, 2.8rc1, 2.8, 2.8.1, 2.8.2, 2.9rc1, 2.9, 2.9.1, 2.9.2, 2.9.3, 2.10rc1, 2.10rc2, 2.10, 2.10.1, 2.10.2, 2.11rc1, 2.11, 2.11.1, 2.11.2, 2.11.3, 2.11.4, 2.11.5, 2.11.6, 2.11.7, 2.11.8, 2.11.9, 2.12rc1, 2.12, 2.12.1, 2.12.2, 2.12.3, 2.12.4, 2.12.5, 2.12.6, 2.13rc1, 2.13rc2, 2.13rc3, 2.13, 2.13.1, 2.13.2, 2.13.3, 2.13.4, 2.13.5, 2.14rc1, 2.14, 2.14.1, 2.14.2, 2.15rc1, 2.15rc2, 2.15, 2.15.1, 2.15.2, 2.15.3, 2.15.4, 2.16rc1, 2.16rc2, 2.16, 2.16.1)
-#10 2.059 ERROR: No matching distribution found for wagtail==3.0a0 (from -r /requirements.txt (line 2))
-#10 2.069 WARNING: You are using pip version 20.0.2; however, version 22.0.4 is available.
-#10 2.069 You should consider upgrading via the '/usr/local/bin/python -m pip install --upgrade pip' command.
-------
-executor failed running [/bin/sh -c pip install -r /requirements.txt]: exit code: 1
-```
-
-Ah, so `pip install wagtail` above installed `wagtail==3.0a0` and you can't simply downgrade the version of Wagtail in requirements since Wagtail modules have been moved in v3.
-Rather than modify the scaffolded project to be Wagtail <3 compatible, nuke it from orbit and downgrade the host installed version of Wagtail::
-
-    rm -rf mysite
-    pip install wagtail==2.16.1
-
-I try the `wagtail start` and `docker build` commands again, followed by a `docker run -p 8000:8000 mysite` and it seems to work this time! 
-I can go to http://0.0.0.0:8000 and see the Wagtail start page. Yay!
+It seems to work! I can go to http://0.0.0.0:8000 and see the Wagtail start page. Yay!
 
 ![Wagtail Start Page, yay!](/docs/img/wagtail-start-page.png)
 
